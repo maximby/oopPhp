@@ -27,6 +27,40 @@ class Address {
     protected $_time_updated;
 
     /**
+     * Constructor.
+     * @param array $data Optional array of property names and values.
+     *
+     */
+    function __construct($data = array()) {
+        $this->_time_created = time();
+
+        // Ensure that the Address can be populated.
+        // Проверяем что объект Address может быть заполнен
+        if (!is_array($data)) {
+            trigger_error('Unable to construct address with a ' .
+                get_class($this));//todo $name непонятно почему 3-03
+        }
+
+        // If there is at least one value, populate the Address with it.
+        // Если есть хотябы одно значение заполняем объект Address.
+        if (count($data) > 0) {
+            foreach ($data as $name => $value) {
+                // Special case for protected properties.
+                // Специальный случай для защищенных свойствю
+                //todo вернуться ипосмотреть еще раз 3-03
+                if (in_array($name, array(
+                    'time_created',
+                    'time_update'
+                ))) {
+                    $name = '_' . $name;
+                }
+                $this->$name = $value;
+            }
+        }
+    }
+
+
+    /**
      * Magic _get.
      * @param string $name
      * @return mixed
