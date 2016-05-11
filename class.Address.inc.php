@@ -3,6 +3,18 @@
  * Physical address.
  */
 class Address {
+
+    const ADDRESS_TYPE_RESIDENCE = 1;
+    const ADDRESS_TYPE_BUSINESS = 2;
+    const ADDRESS_TYPE_PARK = 3;
+
+    // Address types.
+    static public $valid_address_types = array(
+        Address::ADDRESS_TYPE_RESIDENCE => 'Residence', // Домашний адрес
+        Address::ADDRESS_TYPE_BUSINESS => 'Business',
+        Address::ADDRESS_TYPE_PARK => 'Park',
+    );
+
     // Street address.
     public $street_address_1;
     public $street_address_2;
@@ -103,6 +115,14 @@ class Address {
             //Неопределенное или недопустимое свойство метода __set
 
 
+    }
+
+    /**
+     *  Magic __toString
+     * $return string
+     */
+    function __toString() {
+        return $this->display();
     }
 
     /**
