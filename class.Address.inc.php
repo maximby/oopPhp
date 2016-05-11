@@ -34,9 +34,13 @@ class Address {
     // Primary key of an Address.
     protected $_address_id;
 
+    // Address type id.
+    protected $_address_type_id;
+
     // When the record was created and last updated.
     protected $_time_created;
     protected $_time_updated;
+
 
     /**
      * Constructor.
@@ -102,6 +106,12 @@ class Address {
      * @param mixed $value
      */
     function __set($name,$value) {
+        // Only set valid address type id.
+        // устанавливаем только допустимый тип адресса индентификатора
+        if ('address_type_id' == $name) {
+            $this->_setAddressTypeId($value);
+            return;
+        }
         // Allow anything to set the postal code.
         // Разрешить всем задавать почтовый индекс
         if ('postal_code' == $name) {
@@ -158,5 +168,26 @@ class Address {
         $output .= $this->country_name;
 
         return $output;
+    }
+
+    /**
+     * Determine if an address type is valid.
+     * Допустим ли тип адресса.
+     * @param int $address_type_id
+     * @return boolean
+     */
+    static public  function isValidAddressTypeId($address_type_id) {
+        return array_key_exists($address_type_id, self::$valid_address_types);
+    }
+
+    /**
+     *  If valid, set the address type id.
+     *  Задаем индификатор типа адресса, если он допустимю
+     * @param int $address_type_id
+     */
+    protected function _setAddressTypeId($address_type_id) {
+        if (self::isValidAddressTypeId($address_type_id)) {
+            $this->_address_type_id = $address_type_id;
+        }
     }
 }
