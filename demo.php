@@ -55,5 +55,11 @@ echo '<h2>Cloning AddressPark</h2>';
 $address_park_clone = clone $address_park;
 echo '<tt><pre>' . var_export($address_park_clone, true) . '</pre></tt>';
 echo '$address_park_clone is ' .
-    ($address_park == $address_park_clone ?
+    ($address_park ==  $address_park_clone ?
         ' ' : 'not ') . ' a copy of address_park';
+
+echo '<h2>Testing typecasting to an object</h2>';
+$test_object = (object) array (
+    'hello' => 'world',
+    'nested' => array('key' => 'value'),
+);echo '<tt><pre>' . var_export($test_object, true) . '</pre></tt>';
