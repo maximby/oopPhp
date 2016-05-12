@@ -2,7 +2,7 @@
 /**
  * Physical address.
  */
-class Address {
+abstract class Address {
 
     const ADDRESS_TYPE_RESIDENCE = 1;
     const ADDRESS_TYPE_BUSINESS = 2;
@@ -48,6 +48,7 @@ class Address {
      *
      */
     function __construct($data = array()) {
+        $this->_init();
         $this->_time_created = time();
 
         // Ensure that the Address can be populated.
@@ -106,12 +107,7 @@ class Address {
      * @param mixed $value
      */
     function __set($name,$value) {
-        // Only set valid address type id.
-        // устанавливаем только допустимый тип адресса индентификатора
-        if ('address_type_id' == $name) {
-            $this->_setAddressTypeId($value);
-            return;
-        }
+
         // Allow anything to set the postal code.
         // Разрешить всем задавать почтовый индекс
         if ('postal_code' == $name) {
@@ -136,6 +132,12 @@ class Address {
     }
 
     /**
+     * Force extending classes to implement init method.
+     * Вынуждаем дочерние классы реализовать метод init()
+     */
+    protected abstract  function _init();
+
+    /**
      * Guess the postal code given the subdivision and city name.
      * @todo Replace with a database lookup.
      * @return string
@@ -152,7 +154,7 @@ class Address {
 
         $subdivision_name = $mysqli->real_escape_string($this->subdivision_name);
         $sql_query .= 'AND subdivision_name = "' . $subdivision_name .'" ';
-       var_dump($sql_query);
+
         $result = $mysqli->query($sql_query);
 
         if ($row = $result->fetch_assoc()) {
