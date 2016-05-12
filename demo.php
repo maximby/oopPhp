@@ -39,3 +39,21 @@ echo '<tt><pre>' . var_export($address_business, true) . '</pre></tt>';
 
 echo '<h2>Address __toString</h2>';
 echo $address_business;
+
+echo '<h2>Instantiating AddressPark</h2>';
+$address_park = new AddressPark(array(
+    'street_address_1' => '789 Missing Circle',
+    'street_address_2' => 'Suite 0',
+    'city_name' => 'Hamlet',
+    'subdivision_name' => 'Territory',
+    'country_name' => 'Australia',
+));
+echo $address_park;
+echo '<tt><pre>' . var_export($address_park, true) . '</pre></tt>';
+
+echo '<h2>Cloning AddressPark</h2>';
+$address_park_clone = clone $address_park;
+echo '<tt><pre>' . var_export($address_park_clone, true) . '</pre></tt>';
+echo '$address_park_clone is ' .
+    ($address_park == $address_park_clone ?
+        ' ' : 'not ') . ' a copy of address_park';
