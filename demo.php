@@ -1,7 +1,15 @@
 <?php
 
-require 'class.Address.inc.php';
-require 'class.Database.inc.php';
+//require 'class.Address.inc.php';
+//require 'class.Database.inc.php';
+
+/**
+ * Define autoloader.
+ * @param string $class_name
+ */
+function __autoload($class_name) {
+    include 'class.'. $class_name . '.inc.php';
+}
 
 echo '<h2>Instantiating Address</h2>';
 $address = new Address();
