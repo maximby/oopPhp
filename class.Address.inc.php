@@ -141,7 +141,23 @@ class Address {
      * @return string
      */
     protected function _postal_code_guess() {
-        return 'LOOKUP';
+        $db = Database::getInstance();
+        $mysqli = $db->getConnection();
+
+        $sql_query = 'SELECT postal_code ';
+        $sql_query .= 'FROM location ';
+
+        $city_name = $mysqli->real_escape_string($this->city_name);
+        $sql_query .= 'WHERE city_name = "' .$city_name . '" ';
+
+        $subdivision_name = $mysqli->real_escape_string($this->subdivision_name);
+        $sql_query .= 'AND subdivision_name = "' . $subdivision_name .'" ';
+       var_dump($sql_query);
+        $result = $mysqli->query($sql_query);
+
+        if ($row = $result->fetch_assoc()) {
+            return $row['postal_code'];
+        }
     }
 
     /**
