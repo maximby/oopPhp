@@ -12,7 +12,7 @@ class AddressPark extends Address {
     }
 
     public  function display() {
-        $output = '<div style="background-color: aqua">';
+        $output = '<div style="background-color: #36c5ff">';
         $output .= parent::display();
         $output .= '</div>';
         return $output;

@@ -58,8 +58,12 @@ echo '$address_park_clone is ' .
     ($address_park ==  $address_park_clone ?
         ' ' : 'not ') . ' a copy of address_park';
 
-echo '<h2>Testing typecasting to an object</h2>';
+/*echo '<h2>Testing typecasting to an object</h2>';
 $test_object = (object) array (
     'hello' => 'world',
     'nested' => array('key' => 'value'),
-);echo '<tt><pre>' . var_export($test_object, true) . '</pre></tt>';
+);echo '<tt><pre>' . var_export($test_object, true) . '</pre></tt>';*/
+
+echo '<h2>Loading from database</h2>';
+$address_db = Address::load(1);
+echo '<tt><pre>' . var_export($address_db, true) . '</pre></tt>';

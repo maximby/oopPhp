@@ -75,7 +75,9 @@ abstract class Address implements Model  {
                 //todo вернуться ипосмотреть еще раз 3-03
                 if (in_array($name, array(
                     'time_created',
-                    'time_update'
+                    'time_updated',
+                    'address_id',
+                    'address_type_id'
                 ))) {
                     $name = '_' . $name;
                 }
@@ -208,7 +210,7 @@ abstract class Address implements Model  {
 
     /**
      *  If valid, set the address type id.
-     *  Задаем индификатор типа адресса, если он допустимю
+     *  Задаем индификатор типа адресса, если он допустим.
      * @param int $address_type_id
      */
     protected function _setAddressTypeId($address_type_id) {
@@ -220,10 +222,36 @@ abstract class Address implements Model  {
     /**
      * Load an Address
      * @param int $address_id
+     * @return self::getInstance($row['address_type_id'], $row);
      */
      final public static function load($address_id) {
+        $db = Database::getInstance();
+         $mysqli = $db->getConnection();
 
+         $sql_query = 'SELECT * ';
+         $sql_query .= 'FROM location ';
+         $sql_query .= 'WHERE address_id = "' . (int) $address_id . '" ';
+
+         $result = $mysqli->query($sql_query);
+         if ($row = $result->fetch_assoc()) {
+             return self::getInstance($row['address_type_id'], $row);
+         }
      }
+
+    /**
+     * Given an address_type_id, return an instance of that subclass
+     * Метод получает индентификатор типа адреса и возвращает
+     * экземпляр соответсвующего подкласса
+     * @todo !!!!
+     * @param int $address_type_id
+     * @param array $data
+     * @return Address subclass
+     */
+    final  public static function getInstance($address_type_id, $data = array()){
+
+        $class_name = 'Address' . self::$valid_address_types[$address_type_id];
+        return new $class_name($data);
+    }
 
     /**
      * Save an Address.
