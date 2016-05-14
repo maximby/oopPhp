@@ -10,11 +10,12 @@
 function __autoload($class_name) {
     include 'class.'. $class_name . '.inc.php';
 }
-
+//**********************************************
 echo '<h2>Instantiating Address</h2>';
-$address_residence = new AddressResidence();
-
-
+try {
+    //$address_residence = new AddressResidence();
+   $address_residence = Address::getInstance(44);
+    //$address_residence = Address::getInstance(Address::ADDRESS_TYPE_RESIDENCE);
 
 echo '<h2>Setting properties...</h2>';
 $address_residence->street_address_1 = '555 Fake Street';
@@ -24,8 +25,11 @@ $address_residence->country_name = 'United States of America';
 //$address_residence->address_type_id = 1;
 echo $address_residence;
 echo '<tt><pre>' . var_export($address_residence, true) . '</pre></tt>';
+} catch (ExceptionAddress $e) {
+    echo $e->__toString();
+}
 
-
+//*******************************************************
 // Тестирование Address __construct с помощью массива
 echo '<h2>Testing Address __construct with an array</h2>';
 $address_business = new AddressBusiness(array(
@@ -65,5 +69,9 @@ $test_object = (object) array (
 );echo '<tt><pre>' . var_export($test_object, true) . '</pre></tt>';*/
 
 echo '<h2>Loading from database</h2>';
-$address_db = Address::load(1);
-echo '<tt><pre>' . var_export($address_db, true) . '</pre></tt>';
+try {
+    $address_db = Address::load(0);
+    echo '<tt><pre>' . var_export($address_db, true) . '</pre></tt>';
+} catch (ExceptionAddress $e) {
+    echo $e->__toString();
+}

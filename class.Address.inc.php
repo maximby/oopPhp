@@ -8,6 +8,9 @@ abstract class Address implements Model  {
     const ADDRESS_TYPE_BUSINESS = 2;
     const ADDRESS_TYPE_PARK = 3;
 
+    const ADDRESS_ERROR_NOT_FOUND = 1000;
+    const ADDRESS_ERROR_UNKNOWN_SUBCLASS = 1001;
+
     // Address types.
     static public $valid_address_types = array(
         Address::ADDRESS_TYPE_RESIDENCE => 'Residence', // Домашний адрес
@@ -223,6 +226,7 @@ abstract class Address implements Model  {
      * Load an Address
      * @param int $address_id
      * @return self::getInstance($row['address_type_id'], $row);
+     * @throws
      */
      final public static function load($address_id) {
         $db = Database::getInstance();
@@ -236,6 +240,7 @@ abstract class Address implements Model  {
          if ($row = $result->fetch_assoc()) {
              return self::getInstance($row['address_type_id'], $row);
          }
+         throw new ExceptionAddress('Address not found.', self::ADDRESS_ERROR_NOT_FOUND);
      }
 
     /**
@@ -246,10 +251,16 @@ abstract class Address implements Model  {
      * @param int $address_type_id
      * @param array $data
      * @return Address subclass
+     * @throws
      */
     final  public static function getInstance($address_type_id, $data = array()){
 
         $class_name = 'Address' . self::$valid_address_types[$address_type_id];
+        if (!class_exists($class_name) || $class_name=='Address') {
+            throw new ExceptionAddress('Address subclass not found,
+            cannot create.', self::ADDRESS_ERROR_UNKNOWN_SUBCLASS);
+        } //подкласс класса адресс не найден, создать класс не возможно
+
         return new $class_name($data);
     }
 
